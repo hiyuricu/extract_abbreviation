@@ -6,11 +6,10 @@ import string
 import re
 
 #一文ある毎に改行されているテキストを想定している
-file_object = open('resource_data.txt')
+file_object = open('sample.txt')
 abbreviation_list = []
 for line in file_object:
-    match = re.search('(.+?)')
+    match = re.search('(.+?)', line)
     if match is not None:
         abbreviation_list.append(line)
-
-print abbreviation_list
+        print line
