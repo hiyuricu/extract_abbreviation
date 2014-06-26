@@ -11,8 +11,8 @@ wf = open('output_file.txt',"w")
 #wf2 = open('output_file2.txt',"w")
 abbreviation_list = []
 for line in file_object:
-    search = re.search(r'\(.+?\)', line)
-    if search is not None:
+    abbreviation = re.search(r'\(.+?\)', line)
+    if abbreviation is not None:
         abbreviation_list.append(line)
 #        wf2.write(line)
 for i in range(0,len(abbreviation_list)):
