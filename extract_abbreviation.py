@@ -13,19 +13,21 @@ def main(read_file):
 
 #略語と略語を含む文を出力する関数
 def output_abbreviation(read_file):
-    wf = open('sentence_and_abbreviation.txt',"w")
+    wf = open('abbreviation_and_sentence.txt',"w")
     for line in open(read_file,"r"):
         line = line.strip()
         for abb in re.finditer(r'(.+?)\((.+?)\)', line):
+
             wf.write("%s\t%s\n" % (abb.group(2), abb.group(1)))
     wf.close()
 
 #文章を分かち書きする関数
 def setense_wakati():
     tagger = MeCab.Tagger('-Owakati')
-    for line in open('sentence_and_abbreviation.txt',"r"):
-        result = tagger.parse(line)
-        print result
+    for line in open('abbreviation_and_sentence.txt',"r"):
+        temp_list = line.split()
+        result = tagger.parse(temp_list[1])
+        print "%s\t%s\n" % (temp_list[0], result)
 
 if __name__ == "__main__":
     main(sys.argv[1])
