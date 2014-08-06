@@ -6,8 +6,10 @@ import string
 import re
 import MeCab
 
+#perfect_sentence_candidate_dicとabbreviation_scoreの辞書の構成として、keyにはstring,valueにはlistが入るように設計してある
 perfect_sentence_candidate_dic = {}
 abbreviation_score = {}
+
 #一文ある毎に改行されているテキストが引数にあると想定している
 def main(read_file):
     output_abbreviation(read_file)
@@ -103,11 +105,15 @@ def calculate_perfect_sentence_score():
 
 #完全文候補のスコアを比較することで略語と対応する完全文のペアを出力する関数
 def compare_perfect_sentence_score(key, perfect_sentence_score):
+    #keyをsplitして[(略語), (完全文候補)]という構成のリストを作成する
     abbreviation_and_candidate_list = key.split("_")
+    #abbreviation_scoreに略語のキーがあるかどうか見ている
     if abbreviation_and_candidate_list[0] in abbreviation_score:
+        #ある略語の完全文候補のTH(w)を比較して、TH(w)の値が大きい方の完全文候補の、完全文とTH(w)の値をvalueのlistに代入する
         if perfect_sentence_score > abbreviation_score[abbreviation_and_candidate_list[0]][1]:
             abbreviation_score[abbreviation_and_candidate_list[0]][0] = abbreviation_and_candidate_list[1]
             abbreviation_score[abbreviation_and_candidate_list[0]][1] = perfect_sentence_score
+    #辞書に新しくkeyを作成する
     else:
         abbreviation_score[abbreviation_and_candidate_list[0]] = [abbreviation_and_candidate_list[1], perfect_sentence_score]
 
