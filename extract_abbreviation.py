@@ -1,6 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
+
+
+
+
+#言い換えペアがそれぞれ名詞連続のものにするようにしたほうが良い気がする
+#例外として「の、な、」とかの助詞や中点•も名詞にはさまれてもよいとしたい
+
+
+
+
+
+
 import sys
 import string
 import re
@@ -10,7 +23,7 @@ import MeCab
 perfect_sentence_candidate_dic = {}
 abbreviation_score = {}
 
-#一文ある毎に改行されているテキストが引数にあると想定している
+#入力として一文(。がくると改行されている文)一行となっているテキストが引数にあると想定している
 def main(read_file):
     output_abbreviation(read_file)
     sentence_wakati()
@@ -25,8 +38,11 @@ def output_abbreviation(read_file):
     for line in open(read_file,"r"):
         line = line.strip()
         for abb in re.finditer(r'(.+?)\((.+?)\)', line):
-
             wf.write("%s\t%s\n" % (abb.group(2), abb.group(1)))
+
+        for abb in re.finditer(r'(.+?)（(.+?)）', line): #大文字の括弧表現に対応している
+            wf.write("%s\t%s\n" % (abb.group(2), abb.group(1)))
+
     wf.close()
 
 #文章を分かち書きする関数
@@ -35,8 +51,10 @@ def sentence_wakati():
     tagger = MeCab.Tagger('-Owakati')
     for line in open('abbreviation_and_sentence.txt',"r"):
         temp_list = line.split()
-        result = tagger.parse(temp_list[1])
-        wf.write("%s\t%s" % (temp_list[0], result))
+        #完全文候補の文が空でないかどうか見ている
+        if len(temp_list) == 2:
+            result = tagger.parse(temp_list[1])
+            wf.write("%s\t%s" % (temp_list[0], result))
     wf.close()
 
 #完全文候補をキーとし、略語や頻度などが示されているリストをvalueとする辞書を作成する関数。論文では第三ステップに当たる
